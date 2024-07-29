@@ -21,12 +21,11 @@ export const register = async (req, res) => {
             }
         })
 
-        console.log("New User Created :", newUser);
+        res.status(200).json({
+            success: true,
+            data: newUser
+        });
 
-        // res.status(200).json({
-        //     success: true,
-        //     newUser
-        // })
 
     } catch (error) {
         console.error('Error creating user:', error);
@@ -54,21 +53,22 @@ export const login = async (req, res) => {
         if (!isPasswordValid) return res.status(401).json({ message: "Password is invalid" });
 
         // GENERATE COOKIE TOKEN AND SEND TO THE USER
-
         const age = 1000 * 60 * 60 * 24 * 7;
 
         const token = jwt.sign({
             userId: user.id,
         }, process.env.JWT_SECRET_KEY, { expiresIn: age})
 
+        const { password: userPassword, ...userInfo } = user;
         res.cookie("token", token, {
             httpOnly: true,
             //secure: true
             maxAge: age
-        }).status(200).json({ message: "Login successfull"});
+        }).status(200).json(userInfo);
 
     } catch (error) {
         console.log(error.message);
+        res.status(500).json({ message: "Failed to Login"})
     }
 }
 
