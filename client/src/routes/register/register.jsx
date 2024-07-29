@@ -1,14 +1,27 @@
 import "./register.scss";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Register() {
 
-  const handleSubmit = (e) => {
-    const formData =  new formData(e.target);
+  const handleSubmit = async(e) => {
+    const formData =  new FormData(e.target);
 
     const username = formData.get("username");
     const email = formData.get("email");
     const password = formData.get("password");
+
+      try {
+        const res = await axios.post("http://localhost:8700/api/auth/register", {
+          username, email, password
+        })
+
+        console.log(res.data);
+        
+      } catch (error) {
+        console.log(error.message);
+        
+      }
   }
   return (
     <div className="register">
