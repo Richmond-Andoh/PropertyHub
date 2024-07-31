@@ -5,6 +5,7 @@ import cors from "cors"
 
 import postRoute from "./routes/post.route.js"
 import authRoute from "./routes/auth.route.js"
+import testRoute from "./routes/test.route.js"
 
 dotenv.config();
 
@@ -19,9 +20,9 @@ app.use(cors({
      credentials: true 
     }));
 
-app.use("/api/auth", authRoute)
+app.use("/api/auth", authRoute);
 app.use("/api/post",  postRoute);
-
+app.use("/api/test", testRoute);
 
 const listenPort = () => {
     app.listen(PORT, () => {
