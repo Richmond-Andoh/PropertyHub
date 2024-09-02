@@ -6,6 +6,7 @@ import cors from "cors"
 import postRoute from "./routes/post.route.js"
 import authRoute from "./routes/auth.route.js"
 import testRoute from "./routes/test.route.js"
+import userRoute from "./routes/user.route.js"
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(cors({
     }));
 
 app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute)
 app.use("/api/post",  postRoute);
 app.use("/api/test", testRoute);
 
