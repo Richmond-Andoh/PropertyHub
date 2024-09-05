@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.get("/", getAllUsers);
 router.get("/:id", verifyToken, getUser);
-router.put("/update/:id", verifyToken, updateUser);
-router.delete("/delete/:id", verifyToken, deleteUser);
+router.put("/:id", verifyToken, updateUser);
+router.delete("/:id", verifyToken, deleteUser);
 
 
 

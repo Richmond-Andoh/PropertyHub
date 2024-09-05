@@ -7,6 +7,7 @@ import postRoute from "./routes/post.route.js"
 import authRoute from "./routes/auth.route.js"
 import testRoute from "./routes/test.route.js"
 import userRoute from "./routes/user.route.js"
+import { verifyToken } from "./middleware/verifyToken.js";
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ app.use(cors({
      methods: ['GET', 'POST', 'PUT', 'DELETE'],
      credentials: true 
     }));
+
+//app.use(verifyToken);
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute)

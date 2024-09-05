@@ -3,28 +3,35 @@ import "./profileUpdatePage.scss";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
+import { useNavigate } from "react-router-dom";
+import UploadWidget from "../../components/uploadWidget/UploadWidget";
 
 function ProfileUpdatePage() {
   const { currentUser, updateUser } = useContext(AuthContext);
-  const [ error, setError ] = useState('');
-  const [ isLoading, setIsLoading ] = useState(false);
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const [ avatar, setAvatar ] = useState(currentUser.avatar);
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
     const formData = new FormData(e.target);
-
     const { username, email, password } = Object.fromEntries(formData);
 
     try {
-      const res = apiRequest.put(`/users/update/${currentUser.id}`, {
+      const res = await apiRequest.put(`/users/${currentUser.id}`, {
         username,
         email,
-        password
+        password,
+        avatar
       })
 
       updateUser(res.data);
+      if (updateUser) {
+        navigate('/profile');
+      }
     } catch (error) {
       console.log(error)
       setError(error.response.data.message);
@@ -34,8 +41,8 @@ function ProfileUpdatePage() {
     <div className="profileUpdatePage">
       <div className="formContainer">
         <form onSubmit={handleSubmit}>
-            <h1>Update Profile</h1>
-         
+          <h1>Update Profile</h1>
+
           <div className="item">
             <label htmlFor="username">Username</label>
             <input
@@ -59,11 +66,22 @@ function ProfileUpdatePage() {
             <input id="password" name="password" type="password" />
           </div>
           <button>Update</button>
-          { error && <span>{error} </span>}
+          {error && <span>{error}</span>}
         </form>
       </div>
       <div className="sideContainer">
-        <img src={ currentUser.avatar || "/noavatar.jpeg"} alt="" className="avatar" />
+        <img src={avatar || "/noavatar.jpeg"} alt="" className="avatar" />
+        <UploadWidget
+          uwConfig={{
+            cloudName: "drv8dj1zo",
+            uploadPreset: "estate",
+            multiple: "false",
+            maxImageFileSize: 2000000,
+            folders: "avatars"
+          }}
+
+          setAvatar={setAvatar}
+        />
       </div>
     </div>
   );

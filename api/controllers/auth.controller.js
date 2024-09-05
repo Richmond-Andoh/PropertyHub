@@ -53,12 +53,12 @@ export const login = async (req, res) => {
         if (!isPasswordValid) return res.status(401).json({ message: "Password is invalid" });
 
         // GENERATE COOKIE TOKEN AND SEND TO THE USER
-        const age = 1000 * 60 * 60 * 24 * 7;
+        const age = 1000 * 60 * 60 * 24 * 60;
 
         const token = jwt.sign({
             userId: user.id,
             isAdmin: true
-        }, process.env.JWT_SECRET_KEY, { expiresIn: age})
+        }, process.env.JWT_SECRET_KEY, { expiresIn: age} / 1000)
 
         const { password: userPassword, ...userInfo } = user;
         res.cookie("token", token, {
